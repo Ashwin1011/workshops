@@ -23,6 +23,9 @@ module.exports = {
       url: 'https://rpc.goerli.mudit.blog',
       accounts: [process.env.PRIVATE_KEY],
     },
-
+    mumbai: {
+      url: 'https://rpc-mumbai.maticvigil.com/v1/7ed9db516896286a59aac0ec886f2e12e8cbf06e',
+      accounts: [process.env.PRIVATE_KEY],
+    },
   }
 };

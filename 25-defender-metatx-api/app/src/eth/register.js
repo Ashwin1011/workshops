@@ -16,7 +16,7 @@ async function sendMetaTx(registry, provider, signer, name) {
   const from = await signer.getAddress();
   const data = registry.interface.encodeFunctionData('register', [name]);
   const to = registry.address;
-  
+
   const request = await signMetaTxRequest(signer.provider, forwarder, { to, from, data });
 
   return fetch(url, {
@@ -33,13 +33,13 @@ export async function registerName(registry, provider, name) {
   await window.ethereum.enable();
   const userProvider = new ethers.providers.Web3Provider(window.ethereum);
   const userNetwork = await userProvider.getNetwork();
-  if (userNetwork.chainId !== 5) throw new Error(`Please switch to Goerli for signing`);
+  if (userNetwork.chainId !== 80001) throw new Error(`Please switch to Goerli for signing`);
 
   const signer = userProvider.getSigner();
   const from = await signer.getAddress();
   const balance = await provider.getBalance(from);
-  
-  const canSendTx = balance.gt(1e15);
+  console.log(Number(balance))
+  const canSendTx = balance.gt(1000000000000000000n);
   if (canSendTx) return sendTx(registry.connect(signer), name);
   else return sendMetaTx(registry, provider, signer, name);
 }

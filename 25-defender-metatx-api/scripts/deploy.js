@@ -4,9 +4,12 @@ const {
 } = require('defender-relay-client/lib/ethers')
 const { ethers } = require('hardhat')
 const { writeFileSync } = require('fs')
+require('dotenv').config()
 
 async function main() {
-  require('dotenv').config()
+  const [caller] = await ethers.getSigners();
+  console.log("caller acct: " + caller.address);
+
   const credentials = {
     apiKey: process.env.RELAYER_API_KEY,
     apiSecret: process.env.RELAYER_API_SECRET,
