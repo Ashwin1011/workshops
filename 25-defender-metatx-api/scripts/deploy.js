@@ -24,9 +24,9 @@ async function main() {
     .deploy()
     .then((f) => f.deployed())
 
-  const Registry = await ethers.getContractFactory('Registry')
+  const Registry = await ethers.getContractFactory('ClaimMaggi')
   const registry = await Registry.connect(relaySigner)
-    .deploy(forwarder.address)
+    .deploy("0x2762732c426cfc6a773317800bcca8160e40dc5a", forwarder.address)
     .then((f) => f.deployed())
 
   writeFileSync(

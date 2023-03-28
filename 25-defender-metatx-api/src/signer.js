@@ -34,7 +34,7 @@ function getMetaTxTypeData(chainId, verifyingContract) {
 
 async function signTypedData(signer, from, data) {
   // If signer is a private key, use it to sign
-  if (typeof(signer) === 'string') {
+  if (typeof (signer) === 'string') {
     const privateKey = Buffer.from(signer.replace(/^0x/, ''), 'hex');
     return ethSigUtil.signTypedMessage(privateKey, { data });
   }
@@ -49,12 +49,14 @@ async function signTypedData(signer, from, data) {
 }
 
 async function buildRequest(forwarder, input) {
+  console.log(input.from)
   const nonce = await forwarder.getNonce(input.from).then(nonce => nonce.toString());
   return { value: 0, gas: 1e6, nonce, ...input };
 }
 
 async function buildTypedData(forwarder, request) {
   const chainId = await forwarder.provider.getNetwork().then(n => n.chainId);
+  console.log(chainId)
   const typeData = getMetaTxTypeData(chainId, forwarder.address);
   return { ...typeData, message: request };
 }
@@ -66,7 +68,7 @@ async function signMetaTxRequest(signer, forwarder, input) {
   return { signature, request };
 }
 
-module.exports = { 
+module.exports = {
   signMetaTxRequest,
   buildRequest,
   buildTypedData,

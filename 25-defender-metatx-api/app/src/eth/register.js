@@ -2,9 +2,9 @@ import { ethers } from 'ethers';
 import { createInstance } from './forwarder';
 import { signMetaTxRequest } from './signer';
 
-async function sendTx(registry, name) {
+async function sendTx(from, registry, name) {
   console.log(`Sending register tx to set name=${name}`);
-  return registry.register(name);
+  return registry.sendNfts(from, [0], [1]);
 }
 
 async function sendMetaTx(registry, provider, signer, name) {
@@ -14,7 +14,7 @@ async function sendMetaTx(registry, provider, signer, name) {
 
   const forwarder = createInstance(provider);
   const from = await signer.getAddress();
-  const data = registry.interface.encodeFunctionData('register', [name]);
+  const data = registry.interface.encodeFunctionData('sendNfts', [from, [0], [1]]);
   const to = registry.address;
 
   const request = await signMetaTxRequest(signer.provider, forwarder, { to, from, data });
@@ -33,13 +33,13 @@ export async function registerName(registry, provider, name) {
   await window.ethereum.enable();
   const userProvider = new ethers.providers.Web3Provider(window.ethereum);
   const userNetwork = await userProvider.getNetwork();
-  if (userNetwork.chainId !== 80001) throw new Error(`Please switch to Goerli for signing`);
+  if (userNetwork.chainId !== 137) throw new Error(`Please switch to Goerli for signing`);
 
   const signer = userProvider.getSigner();
   const from = await signer.getAddress();
   const balance = await provider.getBalance(from);
   console.log(Number(balance))
-  const canSendTx = balance.gt(1000000000000000000n);
-  if (canSendTx) return sendTx(registry.connect(signer), name);
+  const canSendTx = balance.gt(10000000000000000000n);
+  if (canSendTx) return sendTx(from, registry.connect(signer), name);
   else return sendMetaTx(registry, provider, signer, name);
 }

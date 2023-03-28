@@ -14,7 +14,7 @@ task("accounts", "Prints the list of accounts", async () => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.0",
+  solidity: "0.8.13",
   networks: {
     local: {
       url: 'http://localhost:8545'
@@ -25,6 +25,10 @@ module.exports = {
     },
     mumbai: {
       url: 'https://rpc-mumbai.maticvigil.com/v1/7ed9db516896286a59aac0ec886f2e12e8cbf06e',
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    polygon: {
+      url: 'https://polygon-mainnet.g.alchemy.com/v2/38R9Vnxi-6UPne8ACF4k4radrS8-6UJ1',
       accounts: [process.env.PRIVATE_KEY],
     },
   }
